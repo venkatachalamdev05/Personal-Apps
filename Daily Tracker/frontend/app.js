@@ -7,7 +7,7 @@
 
 const API_URL =
     //"http://localhost:3000/api";
-    "https://personal-apps-tw7j.onrender.com/"
+    "https://personal-apps-tw7j.onrender.com/api"
 
 
 // =====================================================
