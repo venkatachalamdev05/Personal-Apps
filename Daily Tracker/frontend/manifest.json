@@ -1,0 +1,11 @@
+{
+  "name": "Daily Tracker",
+  "short_name": "Tracker",
+  "description": "A simple offline-first daily tracker",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f5f6f8",
+  "theme_color": "#17191f",
+  "orientation": "portrait-primary",
+  "icons": []
+}

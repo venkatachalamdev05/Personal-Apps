@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Daily Tracker</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =====================================================
+     AUTH
+===================================================== -->
+
+<div id="authScreen" class="auth-screen">
+
+    <div class="auth-card">
+
+        <div class="auth-logo">
+            ✓
+        </div>
+
+        <h1>Daily Tracker</h1>
+
+        <p class="auth-description">
+            Build better habits, one day at a time.
+        </p>
+
+
+        <!-- LOGIN -->
+
+        <div id="loginSection">
+
+            <h2>Welcome back</h2>
+
+            <input
+                id="loginEmail"
+                type="email"
+                placeholder="Email"
+            >
+
+            <input
+                id="loginPassword"
+                type="password"
+                placeholder="Password"
+            >
+
+            <button
+                id="loginBtn"
+                class="primary-btn full"
+            >
+                Login
+            </button>
+
+            <p
+                id="loginError"
+                class="error"
+            ></p>
+
+            <p class="switch-text">
+
+                Don't have an account?
+
+                <button
+                    id="showSignupBtn"
+                    class="link-btn"
+                >
+                    Sign up
+                </button>
+
+            </p>
+
+        </div>
+
+
+        <!-- SIGNUP -->
+
+        <div
+            id="signupSection"
+            class="hidden"
+        >
+
+            <h2>Create account</h2>
+
+            <input
+                id="signupName"
+                type="text"
+                placeholder="Your name"
+            >
+
+            <input
+                id="signupEmail"
+                type="email"
+                placeholder="Email"
+            >
+
+            <input
+                id="signupPassword"
+                type="password"
+                placeholder="Password"
+            >
+
+            <input
+                id="signupConfirmPassword"
+                type="password"
+                placeholder="Confirm password"
+            >
+
+            <button
+                id="signupBtn"
+                class="primary-btn full"
+            >
+                Create account
+            </button>
+
+            <p
+                id="signupError"
+                class="error"
+            ></p>
+
+            <p class="switch-text">
+
+                Already have an account?
+
+                <button
+                    id="showLoginBtn"
+                    class="link-btn"
+                >
+                    Login
+                </button>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     APPLICATION
+===================================================== -->
+
+<div id="app" class="hidden">
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+        <div class="brand">
+
+            <div class="brand-logo">
+                ✓
+            </div>
+
+            <div>
+
+                <h1>Daily Tracker</h1>
+
+                <span id="welcomeUser">
+                    Welcome
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="header-actions">
+
+            <span
+                id="onlineStatus"
+                class="online-status"
+            >
+                ● Online
+            </span>
+
+            <button
+                id="syncBtn"
+                class="secondary-btn"
+            >
+                ↻ Sync
+            </button>
+
+            <button
+                id="logoutBtn"
+                class="secondary-btn"
+            >
+                Logout
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- MAIN -->
+
+    <main class="container">
+
+        <!-- YEAR -->
+
+        <div class="year-navigation">
+
+            <button
+                id="previousYear"
+                class="year-btn"
+            >
+                ‹
+            </button>
+
+            <div>
+
+                <div
+                    id="year"
+                    class="year"
+                >
+                    2026
+                </div>
+
+                <div class="year-label">
+                    YEAR
+                </div>
+
+            </div>
+
+            <button
+                id="nextYear"
+                class="year-btn"
+            >
+                ›
+            </button>
+
+        </div>
+
+
+        <!-- CONTROLS -->
+
+        <div class="toolbar">
+
+            <button
+                id="todayBtn"
+                class="secondary-btn"
+            >
+                Today
+            </button>
+
+            <button
+                id="addCategoryBtn"
+                class="primary-btn"
+            >
+                + Add category
+            </button>
+
+        </div>
+
+
+        <!-- LEGEND -->
+
+        <div class="legend">
+
+            <span>
+                <b class="legend-done">✓</b>
+                Done
+            </span>
+
+            <span>
+                <b class="legend-notdone">×</b>
+                Not done
+            </span>
+
+            <span>
+                <b class="legend-empty"></b>
+                Empty
+            </span>
+
+        </div>
+
+
+        <!-- CALENDAR -->
+
+        <div
+            id="calendar"
+            class="calendar-wrapper"
+        ></div>
+
+
+        <div class="help-text">
+
+            <span>
+                Single tap → Done
+            </span>
+
+            <span>
+                Double tap → Not done
+            </span>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<!-- =====================================================
+     ADD CATEGORY MODAL
+===================================================== -->
+
+<div
+    id="categoryModal"
+    class="modal hidden"
+>
+
+    <div class="modal-card">
+
+        <button
+            id="closeCategoryModal"
+            class="close-btn"
+        >
+            ×
+        </button>
+
+        <h2>Add category</h2>
+
+        <p>
+            What do you want to track?
+        </p>
+
+        <input
+            id="categoryInput"
+            type="text"
+            placeholder="Workout"
+            maxlength="40"
+        >
+
+        <div class="modal-buttons">
+
+            <button
+                id="cancelCategory"
+                class="secondary-btn"
+            >
+                Cancel
+            </button>
+
+            <button
+                id="saveCategory"
+                class="primary-btn"
+            >
+                Add
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     EDIT CATEGORY MODAL
+===================================================== -->
+
+<div
+    id="editCategoryModal"
+    class="modal hidden"
+>
+
+    <div class="modal-card">
+
+        <button
+            id="closeEditModal"
+            class="close-btn"
+        >
+            ×
+        </button>
+
+        <h2>Edit category</h2>
+
+        <input
+            id="editCategoryInput"
+            type="text"
+            maxlength="40"
+        >
+
+        <div class="modal-buttons">
+
+            <button
+                id="deleteCategory"
+                class="danger-btn"
+            >
+                Delete
+            </button>
+
+            <button
+                id="updateCategory"
+                class="primary-btn"
+            >
+                Save
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div
+    id="toast"
+    class="toast"
+></div>
+
+
+<script src="app.js"></script>
+
+</body>
+</html>
