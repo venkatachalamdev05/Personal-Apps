@@ -6,8 +6,8 @@
 // Change this if your backend runs on another port.
 
 const API_URL =
-    "http://localhost:3000/api";
-    // "https://daily-tracker-api.onrender.com/api";
+    //"http://localhost:3000/api";
+    "https://personal-apps-tw7j.onrender.com/"
 
 
 // =====================================================
