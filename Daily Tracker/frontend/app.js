@@ -26,6 +26,9 @@ let tracking = [];
 let currentYear =
     new Date().getFullYear();
 
+let currentMonth =
+    new Date().getMonth();
+
 let editingCategoryId = null;
 
 const pendingClicks = new Map();
@@ -1080,13 +1083,20 @@ document
 
 document
     .getElementById(
-        "previousYear"
+        "previousMonth"
     )
     .addEventListener(
         "click",
         () => {
 
-            currentYear--;
+            currentMonth--;
+
+            if (currentMonth < 0) {
+
+                currentMonth = 11;
+                currentYear--;
+
+            }
 
             renderCalendar();
 
@@ -1096,13 +1106,20 @@ document
 
 document
     .getElementById(
-        "nextYear"
+        "nextMonth"
     )
     .addEventListener(
         "click",
         () => {
 
-            currentYear++;
+            currentMonth++;
+
+            if (currentMonth > 11) {
+
+                currentMonth = 0;
+                currentYear++;
+
+            }
 
             renderCalendar();
 
@@ -1118,10 +1135,63 @@ document
         "click",
         () => {
 
+            const today =
+                new Date();
+
             currentYear =
-                new Date().getFullYear();
+                today.getFullYear();
+
+            currentMonth =
+                today.getMonth();
 
             renderCalendar();
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "monthSelect"
+    )
+    .addEventListener(
+        "change",
+        (event) => {
+
+            currentMonth =
+                Number(
+                    event.target.value
+                );
+
+            renderCalendar();
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "yearInput"
+    )
+    .addEventListener(
+        "change",
+        (event) => {
+
+            const nextYear =
+                Number(
+                    event.target.value
+                );
+
+            if (
+                Number.isFinite(nextYear)
+            ) {
+
+                currentYear =
+                    nextYear;
+
+                renderCalendar();
+
+            }
 
         }
     );
@@ -1133,10 +1203,46 @@ document
 
 function renderCalendar() {
 
-    document
-        .getElementById("year")
-        .textContent =
-        currentYear;
+    const monthDisplay =
+        document.getElementById(
+            "monthDisplay"
+        );
+
+    const yearDisplay =
+        document.getElementById(
+            "yearDisplay"
+        );
+
+    const monthSelect =
+        document.getElementById(
+            "monthSelect"
+        );
+
+    const yearInput =
+        document.getElementById(
+            "yearInput"
+        );
+
+    monthDisplay.textContent =
+        new Date(
+            currentYear,
+            currentMonth,
+            1
+        ).toLocaleString(
+            "default",
+            {
+                month: "long"
+            }
+        );
+
+    yearDisplay.textContent =
+        String(currentYear);
+
+    monthSelect.value =
+        String(currentMonth);
+
+    yearInput.value =
+        String(currentYear);
 
 
     const calendar =
@@ -1228,7 +1334,7 @@ function createCategoryCalendar(
 
 
     wrapper.className =
-        "category-row";
+        "category-card";
 
 
     const header =
@@ -1239,6 +1345,16 @@ function createCategoryCalendar(
 
     header.className =
         "category-header";
+
+
+    const info =
+        document.createElement(
+            "div"
+        );
+
+
+    info.className =
+        "category-info";
 
 
     const name =
@@ -1254,6 +1370,9 @@ function createCategoryCalendar(
         category.name;
 
 
+    info.appendChild(name);
+
+
     const edit =
         document.createElement(
             "button"
@@ -1261,7 +1380,7 @@ function createCategoryCalendar(
 
 
     edit.className =
-        "category-edit";
+        "category-edit-btn";
 
     edit.textContent =
         "Edit";
@@ -1276,12 +1395,21 @@ function createCategoryCalendar(
     );
 
 
-    header.appendChild(name);
-
+    header.appendChild(info);
     header.appendChild(edit);
 
 
     wrapper.appendChild(header);
+
+
+    const body =
+        document.createElement(
+            "div"
+        );
+
+
+    body.className =
+        "category-calendar-body";
 
 
     const yearGrid =
@@ -1291,29 +1419,20 @@ function createCategoryCalendar(
 
 
     yearGrid.className =
-        "year-grid";
+        "calendar-month-grid";
 
 
-    for (
-        let month = 0;
-        month < 12;
-        month++
-    ) {
-
-        yearGrid.appendChild(
-            createMonth(
-                category,
-                currentYear,
-                month
-            )
-        );
-
-    }
-
-
-    wrapper.appendChild(
-        yearGrid
+    yearGrid.appendChild(
+        createMonth(
+            category,
+            currentYear,
+            currentMonth
+        )
     );
+
+
+    body.appendChild(yearGrid);
+    wrapper.appendChild(body);
 
 
     return wrapper;
@@ -1338,7 +1457,7 @@ function createMonth(
 
 
     monthElement.className =
-        "month";
+        "calendar-month";
 
 
     const date =
@@ -1380,7 +1499,7 @@ function createMonth(
 
 
     weekdays.className =
-        "weekdays";
+        "weekdays-row";
 
 
     [
@@ -1400,7 +1519,7 @@ function createMonth(
                 );
 
             item.className =
-                "weekday";
+                "weekday-col";
 
             item.textContent =
                 day;
@@ -1425,7 +1544,7 @@ function createMonth(
 
 
     days.className =
-        "days";
+        "days-grid";
 
 
     const firstDay =
@@ -1450,6 +1569,9 @@ function createMonth(
             document.createElement(
                 "div"
             );
+
+        empty.className =
+            "day-cell empty-pad";
 
         days.appendChild(
             empty
@@ -1508,7 +1630,7 @@ function createDay(
 
 
     cell.className =
-        "day";
+        "day-cell";
 
 
     const number =
@@ -1518,7 +1640,7 @@ function createDay(
 
 
     number.className =
-        "number";
+        "day-num";
 
     number.textContent =
         day;

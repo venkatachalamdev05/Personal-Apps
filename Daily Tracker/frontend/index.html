@@ -2,425 +2,161 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Tracker</title>
-
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<!-- =====================================================
-     AUTH
-===================================================== -->
-
+<!-- AUTH SCREEN -->
 <div id="authScreen" class="auth-screen">
-
     <div class="auth-card">
-
-        <div class="auth-logo">
-            ✓
-        </div>
-
+        <div class="auth-logo">✓</div>
         <h1>Daily Tracker</h1>
-
-        <p class="auth-description">
-            Build better habits, one day at a time.
-        </p>
-
+        <p class="auth-description">Build better habits, one day at a time.</p>
 
         <!-- LOGIN -->
-
         <div id="loginSection">
-
             <h2>Welcome back</h2>
-
-            <input
-                id="loginEmail"
-                type="email"
-                placeholder="Email"
-            >
-
-            <input
-                id="loginPassword"
-                type="password"
-                placeholder="Password"
-            >
-
-            <button
-                id="loginBtn"
-                class="primary-btn full"
-            >
-                Login
-            </button>
-
-            <p
-                id="loginError"
-                class="error"
-            ></p>
-
+            <input id="loginEmail" type="email" placeholder="Email" autocomplete="email">
+            <input id="loginPassword" type="password" placeholder="Password" autocomplete="current-password">
+            <button id="loginBtn" class="primary-btn full">Login</button>
+            <p id="loginError" class="error"></p>
             <p class="switch-text">
-
                 Don't have an account?
-
-                <button
-                    id="showSignupBtn"
-                    class="link-btn"
-                >
-                    Sign up
-                </button>
-
+                <button id="showSignupBtn" class="link-btn">Sign up</button>
             </p>
-
         </div>
-
 
         <!-- SIGNUP -->
-
-        <div
-            id="signupSection"
-            class="hidden"
-        >
-
+        <div id="signupSection" class="hidden">
             <h2>Create account</h2>
-
-            <input
-                id="signupName"
-                type="text"
-                placeholder="Your name"
-            >
-
-            <input
-                id="signupEmail"
-                type="email"
-                placeholder="Email"
-            >
-
-            <input
-                id="signupPassword"
-                type="password"
-                placeholder="Password"
-            >
-
-            <input
-                id="signupConfirmPassword"
-                type="password"
-                placeholder="Confirm password"
-            >
-
-            <button
-                id="signupBtn"
-                class="primary-btn full"
-            >
-                Create account
-            </button>
-
-            <p
-                id="signupError"
-                class="error"
-            ></p>
-
+            <input id="signupName" type="text" placeholder="Your name" autocomplete="name">
+            <input id="signupEmail" type="email" placeholder="Email" autocomplete="email">
+            <input id="signupPassword" type="password" placeholder="Password" autocomplete="new-password">
+            <input id="signupConfirmPassword" type="password" placeholder="Confirm password" autocomplete="new-password">
+            <button id="signupBtn" class="primary-btn full">Create account</button>
+            <p id="signupError" class="error"></p>
             <p class="switch-text">
-
                 Already have an account?
-
-                <button
-                    id="showLoginBtn"
-                    class="link-btn"
-                >
-                    Login
-                </button>
-
+                <button id="showLoginBtn" class="link-btn">Login</button>
             </p>
-
         </div>
-
     </div>
-
 </div>
 
-
-<!-- =====================================================
-     APPLICATION
-===================================================== -->
-
+<!-- APPLICATION -->
 <div id="app" class="hidden">
-
     <!-- HEADER -->
-
     <header class="header">
-
         <div class="brand">
-
-            <div class="brand-logo">
-                ✓
-            </div>
-
+            <div class="brand-logo">✓</div>
             <div>
-
                 <h1>Daily Tracker</h1>
-
-                <span id="welcomeUser">
-                    Welcome
-                </span>
-
+                <span id="welcomeUser">Welcome</span>
             </div>
-
         </div>
-
 
         <div class="header-actions">
-
-            <span
-                id="onlineStatus"
-                class="online-status"
-            >
-                ● Online
-            </span>
-
-            <button
-                id="syncBtn"
-                class="secondary-btn"
-            >
-                ↻ Sync
-            </button>
-
-            <button
-                id="logoutBtn"
-                class="secondary-btn"
-            >
-                Logout
-            </button>
-
+            <span id="onlineStatus" class="online-status">● Online</span>
+            <button id="syncBtn" class="secondary-btn">↻ Sync</button>
+            <button id="logoutBtn" class="secondary-btn">Logout</button>
         </div>
-
     </header>
 
-
-    <!-- MAIN -->
-
+    <!-- MAIN CONTAINER -->
     <main class="container">
-
-        <!-- YEAR -->
-
-        <div class="year-navigation">
-
-            <button
-                id="previousYear"
-                class="year-btn"
-            >
-                ‹
-            </button>
-
-            <div>
-
-                <div
-                    id="year"
-                    class="year"
-                >
-                    2026
+        <!-- MONTH & YEAR NAVIGATION -->
+        <div class="month-navigation">
+            <button id="previousMonth" class="nav-btn" title="Previous Month" aria-label="Previous Month">‹</button>
+            
+            <div class="date-header">
+                <div class="month-year-display">
+                    <span id="monthDisplay" class="month-text">August</span>
+                    <span id="yearDisplay" class="year-text">2026</span>
                 </div>
-
-                <div class="year-label">
-                    YEAR
-                </div>
-
+                <div class="nav-sublabel">MONTHLY TRACKER</div>
             </div>
 
-            <button
-                id="nextYear"
-                class="year-btn"
-            >
-                ›
-            </button>
-
+            <button id="nextMonth" class="nav-btn" title="Next Month" aria-label="Next Month">›</button>
         </div>
 
-
-        <!-- CONTROLS -->
-
+        <!-- CONTROLS & TOOLBAR -->
         <div class="toolbar">
+            <div class="toolbar-left">
+                <button id="todayBtn" class="secondary-btn">Today</button>
+                <div class="month-quick-selector">
+                    <select id="monthSelect" class="dropdown-select" title="Jump to month">
+                        <option value="0">January</option>
+                        <option value="1">February</option>
+                        <option value="2">March</option>
+                        <option value="3">April</option>
+                        <option value="4">May</option>
+                        <option value="5">June</option>
+                        <option value="6">July</option>
+                        <option value="7">August</option>
+                        <option value="8">September</option>
+                        <option value="9">October</option>
+                        <option value="10">November</option>
+                        <option value="11">December</option>
+                    </select>
+                    <input id="yearInput" type="number" class="year-quick-input" min="1900" max="2100" value="2026" title="Jump to year">
+                </div>
+            </div>
 
-            <button
-                id="todayBtn"
-                class="secondary-btn"
-            >
-                Today
-            </button>
-
-            <button
-                id="addCategoryBtn"
-                class="primary-btn"
-            >
-                + Add category
-            </button>
-
+            <button id="addCategoryBtn" class="primary-btn">+ Add category</button>
         </div>
-
 
         <!-- LEGEND -->
-
         <div class="legend">
-
-            <span>
-                <b class="legend-done">✓</b>
-                Done
-            </span>
-
-            <span>
-                <b class="legend-notdone">×</b>
-                Not done
-            </span>
-
-            <span>
-                <b class="legend-empty"></b>
-                Empty
-            </span>
-
+            <span><b class="legend-done">✓</b> Done</span>
+            <span><b class="legend-notdone">×</b> Not done</span>
+            <span><b class="legend-empty"></b> Empty</span>
+            <span><b class="legend-today"></b> Today</span>
         </div>
 
-
-        <!-- CALENDAR -->
-
-        <div
-            id="calendar"
-            class="calendar-wrapper"
-        ></div>
-
+        <!-- CALENDAR / CATEGORIES CONTAINER -->
+        <div id="calendar" class="calendar-wrapper"></div>
 
         <div class="help-text">
-
-            <span>
-                Single tap → Done
-            </span>
-
-            <span>
-                Double tap → Not done
-            </span>
-
+            <span>Single tap → <b>Done (✓)</b></span>
+            <span>Double tap → <b>Not done (×)</b></span>
+            <span>Tap marked day → <b>Clear</b></span>
         </div>
-
     </main>
-
 </div>
 
-
-<!-- =====================================================
-     ADD CATEGORY MODAL
-===================================================== -->
-
-<div
-    id="categoryModal"
-    class="modal hidden"
->
-
+<!-- ADD CATEGORY MODAL -->
+<div id="categoryModal" class="modal hidden">
     <div class="modal-card">
-
-        <button
-            id="closeCategoryModal"
-            class="close-btn"
-        >
-            ×
-        </button>
-
+        <button id="closeCategoryModal" class="close-btn" aria-label="Close">×</button>
         <h2>Add category</h2>
-
-        <p>
-            What do you want to track?
-        </p>
-
-        <input
-            id="categoryInput"
-            type="text"
-            placeholder="Workout"
-            maxlength="40"
-        >
-
+        <p>What habit or activity do you want to track?</p>
+        <input id="categoryInput" type="text" placeholder="e.g., Workout, Reading, Meditation" maxlength="40">
         <div class="modal-buttons">
-
-            <button
-                id="cancelCategory"
-                class="secondary-btn"
-            >
-                Cancel
-            </button>
-
-            <button
-                id="saveCategory"
-                class="primary-btn"
-            >
-                Add
-            </button>
-
+            <button id="cancelCategory" class="secondary-btn">Cancel</button>
+            <button id="saveCategory" class="primary-btn">Add Category</button>
         </div>
-
     </div>
-
 </div>
 
-
-<!-- =====================================================
-     EDIT CATEGORY MODAL
-===================================================== -->
-
-<div
-    id="editCategoryModal"
-    class="modal hidden"
->
-
+<!-- EDIT CATEGORY MODAL -->
+<div id="editCategoryModal" class="modal hidden">
     <div class="modal-card">
-
-        <button
-            id="closeEditModal"
-            class="close-btn"
-        >
-            ×
-        </button>
-
+        <button id="closeEditModal" class="close-btn" aria-label="Close">×</button>
         <h2>Edit category</h2>
-
-        <input
-            id="editCategoryInput"
-            type="text"
-            maxlength="40"
-        >
-
+        <p>Update category name or delete this habit tracker.</p>
+        <input id="editCategoryInput" type="text" maxlength="40">
         <div class="modal-buttons">
-
-            <button
-                id="deleteCategory"
-                class="danger-btn"
-            >
-                Delete
-            </button>
-
-            <button
-                id="updateCategory"
-                class="primary-btn"
-            >
-                Save
-            </button>
-
+            <button id="deleteCategory" class="danger-btn">Delete</button>
+            <button id="updateCategory" class="primary-btn">Save</button>
         </div>
-
     </div>
-
 </div>
-
 
 <!-- TOAST -->
-
-<div
-    id="toast"
-    class="toast"
-></div>
-
+<div id="toast" class="toast"></div>
 
 <script src="app.js"></script>
-
 </body>
 </html>
