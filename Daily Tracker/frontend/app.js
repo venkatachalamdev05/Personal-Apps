@@ -1585,11 +1585,8 @@ function createDay(
 
 
     /*
-        Single click:
-        DONE
-
-        Double click:
-        NOT DONE
+        Single click toggles DONE / empty.
+        Double click toggles NOT DONE / empty.
     */
 
     cell.addEventListener(
@@ -1611,10 +1608,18 @@ function createDay(
                 );
 
 
+                const currentStatus =
+                    getStatus(
+                        category.id,
+                        date
+                    );
+
                 setStatus(
                     category.id,
                     date,
-                    "not-done"
+                    currentStatus === "not-done"
+                        ? null
+                        : "not-done"
                 );
 
 
@@ -1632,10 +1637,18 @@ function createDay(
                         );
 
 
+                        const currentStatus =
+                            getStatus(
+                                category.id,
+                                date
+                            );
+
                         setStatus(
                             category.id,
                             date,
-                            "done"
+                            currentStatus === "done"
+                                ? null
+                                : "done"
                         );
 
                     },
@@ -1703,6 +1716,39 @@ function setStatus(
                 entry.date ===
                     date
         );
+
+
+    if (
+        status === null ||
+        status === undefined ||
+        status === ""
+    ) {
+
+        if (index >= 0) {
+
+            tracking.splice(
+                index,
+                1
+            );
+
+        }
+
+
+        saveLocalData();
+
+
+        renderCalendar();
+
+
+        if (navigator.onLine) {
+
+            sync();
+
+        }
+
+        return;
+
+    }
 
 
     const item = {

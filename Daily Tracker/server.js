@@ -631,6 +631,17 @@ app.post(
             );
 
 
+            // Clear stale tracking data for this user so
+            // unchecked days are truly removed.
+            await client.query(
+                `
+                DELETE FROM tracking
+                WHERE user_id = $1
+                `,
+                [req.userId]
+            );
+
+
             // -----------------------------------------
             // CATEGORIES
             // -----------------------------------------
