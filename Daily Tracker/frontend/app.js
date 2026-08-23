@@ -29,6 +29,8 @@ let currentYear =
 let currentMonth =
     new Date().getMonth();
 
+let selectedCategoryId = null;
+
 let editingCategoryId = null;
 
 const pendingClicks = new Map();
@@ -815,7 +817,7 @@ async function addCategory() {
     }
 
 
-    categories.push({
+    const newCategory = {
 
         id:
             crypto.randomUUID(),
@@ -831,7 +833,11 @@ async function addCategory() {
         updated_at:
             new Date().toISOString()
 
-    });
+    };
+
+
+    categories.push(newCategory);
+    selectedCategoryId = newCategory.id;
 
 
     saveLocalData();
@@ -1052,6 +1058,17 @@ document
                 );
 
 
+            if (
+                selectedCategoryId ===
+                    editingCategoryId
+            ) {
+
+                selectedCategoryId =
+                    categories[0]?.id || null;
+
+            }
+
+
             saveLocalData();
 
 
@@ -1201,6 +1218,39 @@ document
 // CALENDAR
 // =====================================================
 
+function ensureSelectedCategory() {
+
+    if (categories.length === 0) {
+
+        selectedCategoryId = null;
+        return null;
+
+    }
+
+
+    const exists =
+        categories.some(
+            item =>
+                item.id ===
+                    selectedCategoryId
+        );
+
+    if (!exists) {
+
+        selectedCategoryId =
+            categories[0].id;
+
+    }
+
+    return categories.find(
+        item =>
+            item.id ===
+                selectedCategoryId
+    );
+
+}
+
+
 function renderCalendar() {
 
     const monthDisplay =
@@ -1299,21 +1349,57 @@ function renderCalendar() {
     }
 
 
-    /*
-        Each category gets its own
-        complete yearly calendar.
-    */
+    const selectedCategory =
+        ensureSelectedCategory();
+
+    const tabs =
+        document.createElement(
+            "div"
+        );
+
+    tabs.className =
+        "category-tabs";
 
     categories.forEach(
         category => {
 
-            calendar.appendChild(
-                createCategoryCalendar(
-                    category
-                )
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+            button.className =
+                `category-tab ${
+                    category.id ===
+                        selectedCategory.id
+                        ? "active"
+                        : ""
+                }`;
+
+            button.textContent =
+                category.name;
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    selectedCategoryId =
+                        category.id;
+                    renderCalendar();
+
+                }
             );
 
+            tabs.appendChild(button);
+
         }
+    );
+
+    calendar.appendChild(tabs);
+    calendar.appendChild(
+        createCategoryCalendar(
+            selectedCategory
+        )
     );
 
 }
@@ -1322,6 +1408,265 @@ function renderCalendar() {
 // =====================================================
 // CATEGORY CALENDAR
 // =====================================================
+
+function getCategoryAnalytics(
+    categoryId
+) {
+
+    const entries =
+        tracking.filter(
+            item =>
+                item.category_id ===
+                    categoryId
+                &&
+                (
+                    item.status ===
+                        "done"
+                    ||
+                    item.status ===
+                        "not-done"
+                )
+        );
+
+
+    if (entries.length === 0) {
+
+        return {
+            bestStreak: 0,
+            currentStreak: 0,
+            doneCount: 0,
+            notDoneCount: 0,
+            completionRate: 0,
+            trackedDays: 0
+        };
+
+    }
+
+
+    const byDate =
+        new Map(
+            entries.map(
+                entry =>
+                    [entry.date, entry.status]
+            )
+        );
+
+    const sortedDates =
+        [...new Set(
+            entries.map(
+                entry =>
+                    entry.date
+            )
+        )].sort();
+
+
+    let bestStreak = 0;
+    let streakRun = 0;
+
+    const firstDate =
+        new Date(
+            `${sortedDates[0]}T00:00:00`
+        );
+
+    const lastDate =
+        new Date(
+            `${sortedDates[sortedDates.length - 1]}T00:00:00`
+        );
+
+
+    for (
+        let cursor =
+            new Date(firstDate);
+        cursor <= lastDate;
+        cursor.setDate(
+            cursor.getDate() + 1
+        )
+    ) {
+
+        const key =
+            formatDate(
+                cursor.getFullYear(),
+                cursor.getMonth(),
+                cursor.getDate()
+            );
+
+        if (byDate.get(key) === "done") {
+
+            streakRun++;
+            bestStreak =
+                Math.max(
+                    bestStreak,
+                    streakRun
+                );
+
+        }
+        else {
+
+            streakRun = 0;
+
+        }
+
+    }
+
+
+    let currentStreak = 0;
+    const today =
+        new Date();
+
+    for (
+        let cursor =
+            new Date(today);
+        ;
+        cursor.setDate(
+            cursor.getDate() - 1
+        )
+    ) {
+
+        const key =
+            formatDate(
+                cursor.getFullYear(),
+                cursor.getMonth(),
+                cursor.getDate()
+            );
+
+        if (byDate.get(key) === "done") {
+
+            currentStreak++;
+
+        }
+        else {
+
+            break;
+
+        }
+
+    }
+
+
+    const doneCount =
+        entries.filter(
+            item =>
+                item.status === "done"
+        ).length;
+
+    const notDoneCount =
+        entries.filter(
+            item =>
+                item.status === "not-done"
+        ).length;
+
+    const trackedDays =
+        sortedDates.length;
+
+    const totalSpanDays =
+        Math.max(
+            1,
+            Math.floor(
+                (lastDate - firstDate) /
+                    (1000 * 60 * 60 * 24)
+            ) + 1
+        );
+
+    const completionRate =
+        Math.round(
+            (doneCount / totalSpanDays) * 100
+        );
+
+
+    return {
+        bestStreak,
+        currentStreak,
+        doneCount,
+        notDoneCount,
+        completionRate,
+        trackedDays
+    };
+
+}
+
+
+function createAnalyticsSummary(
+    categoryId
+) {
+
+    const analytics =
+        getCategoryAnalytics(
+            categoryId
+        );
+
+    const summary =
+        document.createElement(
+            "div"
+        );
+
+    summary.className =
+        "analytics-summary";
+
+    const items = [
+        {
+            label: "Current",
+            value: `${analytics.currentStreak}d`
+        },
+        {
+            label: "Best",
+            value: `${analytics.bestStreak}d`
+        },
+        {
+            label: "Done",
+            value: String(
+                analytics.doneCount
+            )
+        },
+        {
+            label: "Rate",
+            value: `${analytics.completionRate}%`
+        }
+    ];
+
+    items.forEach(
+        item => {
+
+            const box =
+                document.createElement(
+                    "div"
+                );
+
+            box.className =
+                "analytics-item";
+
+            const label =
+                document.createElement(
+                    "span"
+                );
+
+            label.className =
+                "analytics-label";
+
+            label.textContent =
+                item.label;
+
+            const value =
+                document.createElement(
+                    "strong"
+                );
+
+            value.className =
+                "analytics-value";
+
+            value.textContent =
+                item.value;
+
+            box.appendChild(label);
+            box.appendChild(value);
+            summary.appendChild(box);
+
+        }
+    );
+
+    return summary;
+
+}
+
 
 function createCategoryCalendar(
     category
@@ -1400,6 +1745,11 @@ function createCategoryCalendar(
 
 
     wrapper.appendChild(header);
+    wrapper.appendChild(
+        createAnalyticsSummary(
+            category.id
+        )
+    );
 
 
     const body =
