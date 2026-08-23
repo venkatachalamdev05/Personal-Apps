@@ -470,6 +470,15 @@ async function startApp() {
 
         await downloadFromServer();
 
+        if (
+            categories.length > 0 ||
+            tracking.length > 0
+        ) {
+
+            await sync();
+
+        }
+
     }
 
 }
@@ -626,6 +635,7 @@ async function sync() {
 
     if (!navigator.onLine) {
 
+        return;
 
     }
 
