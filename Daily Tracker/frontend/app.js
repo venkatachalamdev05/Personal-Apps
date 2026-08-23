@@ -626,11 +626,6 @@ async function sync() {
 
     if (!navigator.onLine) {
 
-        showToast(
-            "You are offline"
-        );
-
-        return;
 
     }
 
@@ -702,10 +697,6 @@ async function sync() {
     catch (error) {
 
         console.error(error);
-
-        showToast(
-            "Sync failed"
-        );
 
     }
     finally {
