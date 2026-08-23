@@ -698,11 +698,6 @@ async function sync() {
 
         renderCalendar();
 
-
-        showToast(
-            "Synced ✓"
-        );
-
     }
     catch (error) {
 
