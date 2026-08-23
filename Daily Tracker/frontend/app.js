@@ -635,6 +635,10 @@ async function sync() {
 
     if (!navigator.onLine) {
 
+        showToast(
+            "You are offline"
+        );
+
         return;
 
     }
@@ -703,10 +707,19 @@ async function sync() {
 
         renderCalendar();
 
+
+        showToast(
+            "Synced ✓"
+        );
+
     }
     catch (error) {
 
         console.error(error);
+
+        showToast(
+            "Sync failed"
+        );
 
     }
     finally {
